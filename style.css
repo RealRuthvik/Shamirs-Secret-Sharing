@@ -1,0 +1,31 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+    margin: 0;
+}
+.container {
+    width: 100%;
+    max-width: 600px;
+    background-color: #2a2a2a;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+h1 { text-align: center; margin-top: 0; color: #4CAF50; }
+.tabs { display: flex; border-bottom: 2px solid #444; margin-bottom: 20px; }
+.tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; background-color: #333; color: #888; }
+.tab.active { background-color: #4CAF50; color: white; font-weight: bold; }
+.card { background-color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; }
+h3 { margin-top: 0; color: #ddd; border-bottom: 1px solid #444; padding-bottom: 5px; }
+input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; background-color: #222; border: 1px solid #555; color: white; border-radius: 4px; box-sizing: border-box; }
+.row { display: flex; gap: 10px; }
+button { width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; }
+button:hover { background-color: #45a049; }
+button.secondary { background-color: #2196F3; }
+button.secondary:hover { background-color: #0b7dda; }
+.result-box { margin-top: 15px; padding: 10px; background-color: #222; border: 1px solid #555; border-radius: 4px; word-wrap: break-word; font-family: monospace; color: #81C784; }
+.hidden { display: none; }
