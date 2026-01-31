@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form, UploadFile, File
+from fastapi import FastAPI, Form, UploadFile, File, HTTPException
 from fastapi.responses import StreamingResponse, FileResponse
 import io
 import zipfile
@@ -25,10 +25,13 @@ def getScript():
 
 @app.post("/text/generate")
 def generateText(text: str = Form(...), n: int = Form(...), k: int = Form(...)):
-
-    secretInt = sss.stringToInt(text)
-    sharesList = sss.createShares(secretInt, k, n)
-
+    
+    try:
+        secretInt = sss.stringToInt(text)
+        sharesList = sss.createShares(secretInt, k, n)
+    except ValueError as e:
+        raise HTTPException(status_code = 400, detail = str(e))
+        
     formattedShares = []
     for share in sharesList:
         formattedShares.append(f"{share[0]}-{share[1]}")
