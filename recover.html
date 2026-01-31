@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSS Decrypter</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <h1>Shamir's Secret Sharing - Decrypter</h1>
+    <a href="/" class="nav-link">Go to Encrypter / Generate Page</a>
+
+    <fieldset>
+        <legend>Text Recovery</legend>
+        <form id="textRecForm">
+            <div class="form-group">
+                <label>How many shares do you have?</label>
+                <input type="number" id="numSharesInput" min="2" max="50" placeholder="e.g., 3" required>
+            </div>
+            <div id="dynamicShareInputs" class="form-group">
+                <p class="helper-text">Enter the number of shares above to begin.</p>
+            </div>
+            <button type="submit" id="recoverTextBtn" class="hidden">Recover Secret</button>
+        </form>
+        <div class="form-group hidden" id="textRecResultContainer">
+            <label>Recovered Secret:</label>
+            <div id="textRecResult" class="output-area" style="padding: 10px;"></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Image Recovery</legend>
+        <form id="imageRecForm">
+            <div class="form-group">
+                <label>Select Share Files (Minimum K required):</label>
+                <input type="file" name="files" multiple required>
+                <p class="helper-text">Select files like share_1.sss, share_2.sss, etc.</p>
+            </div>
+            <button type="submit">Recover Image</button>
+        </form>
+    </fieldset>
+
+    <script src="/script.js"></script>
+</body>
+</html>

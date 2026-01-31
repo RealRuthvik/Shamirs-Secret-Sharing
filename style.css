@@ -1,31 +1,122 @@
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #1a1a1a;
-    color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    padding-top: 50px;
-    margin: 0;
+    font-family: "Times New Roman", Times, serif;
+    background-color: #ffffff;
+    color: #000000;
+    margin: 20px;
 }
-.container {
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.nav-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #0000EE;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+fieldset {
+    border: 1px solid #999;
+    padding: 15px;
+    margin-bottom: 20px;
+    max-width: 800px;
+}
+
+legend {
+    font-weight: bold;
+    padding: 0 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea {
     width: 100%;
-    max-width: 600px;
-    background-color: #2a2a2a;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-sizing: border-box;
+    padding: 5px;
+    border: 1px solid #999;
+    font-family: monospace;
 }
-h1 { text-align: center; margin-top: 0; color: #4CAF50; }
-.tabs { display: flex; border-bottom: 2px solid #444; margin-bottom: 20px; }
-.tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; background-color: #333; color: #888; }
-.tab.active { background-color: #4CAF50; color: white; font-weight: bold; }
-.card { background-color: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; }
-h3 { margin-top: 0; color: #ddd; border-bottom: 1px solid #444; padding-bottom: 5px; }
-input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; background-color: #222; border: 1px solid #555; color: white; border-radius: 4px; box-sizing: border-box; }
-.row { display: flex; gap: 10px; }
-button { width: 100%; padding: 12px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold; }
-button:hover { background-color: #45a049; }
-button.secondary { background-color: #2196F3; }
-button.secondary:hover { background-color: #0b7dda; }
-.result-box { margin-top: 15px; padding: 10px; background-color: #222; border: 1px solid #555; border-radius: 4px; word-wrap: break-word; font-family: monospace; color: #81C784; }
-.hidden { display: none; }
+
+textarea {
+    resize: vertical;
+    height: 150px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+.form-row .form-group {
+    flex: 1;
+}
+
+button {
+    padding: 5px 15px;
+    background-color: #f0f0f0;
+    border: 1px solid #999;
+    color: black;
+    cursor: pointer;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1em;
+}
+
+button:active {
+    background-color: #e0e0e0;
+}
+
+.output-area {
+    margin-top: 20px;
+    border: 1px solid #999;
+    /* Removed padding here, moved to individual rows for cleaner look */
+    padding: 0; 
+    background-color: #fff;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+/* NEW: Zebra striping for shares */
+.share-row {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.share-row:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.share-row:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.share-row:last-child {
+    border-bottom: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.helper-text {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Styling for dynamic inputs on recover page */
+.dynamic-share-input {
+    margin-bottom: 5px;
+}

@@ -3,68 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSS Secure Vault</title>
+    <title>SSS Encrypter</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>SSS Vault</h1>
+    <h1>Shamir's Secret Sharing (SSS) - Encrypter</h1>
+    <a href="/recover" class="nav-link">Go to Decrypter / Recover Page</a>
 
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('text')">Text Mode</div>
-            <div class="tab" onclick="switchTab('image')">Image Mode</div>
+    <fieldset>
+        <legend>Text Encryption</legend>
+        <form id="textGenForm">
+            <div class="form-group">
+                <label>Secret Text:</label>
+                <textarea name="text" required></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Total Shares (N):</label>
+                    <input type="number" name="n" value="5" min="2" max="50" required>
+                </div>
+                <div class="form-group">
+                    <label>Threshold (K):</label>
+                    <input type="number" name="k" value="3" min="2" max="50" required>
+                </div>
+            </div>
+            <button type="submit">Generate Shares</button>
+        </form>
+        <div class="form-group hidden" id="textGenResultContainer">
+            <label>Generated Shares:</label>
+            <div id="textGenResult" class="output-area"></div>
         </div>
+    </fieldset>
 
-        <div id="text-section">
-            <div class="card">
-                <h3>Encrypt Text</h3>
-                <form id="textGenForm">
-                    <input type="text" name="text" placeholder="Enter secret text" required>
-                    <div class="row">
-                        <input type="number" name="n" value="5" placeholder="Total Shares (N)">
-                        <input type="number" name="k" value="3" placeholder="Threshold (K)">
-                    </div>
-                    <button type="submit">Generate Shares</button>
-                </form>
-                <div id="textGenResult" class="result-box hidden"></div>
+    <fieldset>
+        <legend>Image Encryption</legend>
+        <form id="imageGenForm">
+            <div class="form-group">
+                <label>Select Image:</label>
+                <input type="file" name="file" accept="image/*" required>
             </div>
-
-            <div class="card">
-                <h3>Recover Text</h3>
-                <form id="textRecForm">
-                    <textarea name="shares" rows="4" placeholder="Paste shares here (one per line)..." required></textarea>
-                    <button type="submit" class="secondary">Recover Secret</button>
-                </form>
-                <div id="textRecResult" class="result-box hidden"></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Total Shares (N):</label>
+                    <input type="number" name="n" value="5" min="2" max="50" required>
+                </div>
+                <div class="form-group">
+                    <label>Threshold (K):</label>
+                    <input type="number" name="k" value="3" min="2" max="50" required>
+                </div>
             </div>
-        </div>
-
-        <div id="image-section" class="hidden">
-            <div class="card">
-                <h3>Encrypt Image</h3>
-                <form id="imageGenForm">
-                    <input type="file" name="file" accept="image/*" required>
-                    <div class="row">
-                        <input type="number" name="n" value="5" placeholder="N">
-                        <input type="number" name="k" value="3" placeholder="K">
-                    </div>
-                    <button type="submit">Download Shares (Zip)</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <h3>Recover Image</h3>
-                <form id="imageRecForm">
-                    <label style="display:block; margin-bottom:10px; color:#aaa; font-size:0.9em;">
-                        Select at least K share files (e.g. share_1.sss, share_3.sss)
-                    </label>
-                    <input type="file" name="files" multiple required>
-                    <button type="submit" class="secondary">Recover Image</button>
-                </form>
-            </div>
-        </div>
-    </div>
+            <button type="submit">Download Shares (Zip)</button>
+        </form>
+    </fieldset>
 
     <script src="/script.js"></script>
 </body>
