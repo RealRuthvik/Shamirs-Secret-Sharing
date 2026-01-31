@@ -108,4 +108,4 @@ Lagrange interpolation directly evaluates this value without reconstructing the 
 ├── index.html        # Web UI for encryption
 ├── recover.html      # Web UI for recovery
 ├── script.js         # Frontend logic and form handling (3 functions were made with AI-Assistance)
-└── style.css         # Brutalist-style UI styling (Completely with AI-Assistance)
+└── style.css         # Brutalist-style UI styling (Completely made with AI-Assistance)
