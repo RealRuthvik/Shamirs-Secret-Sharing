@@ -1,71 +1,113 @@
-# **Shamir's Secret Sharing (SSS)**
+# Shamir's Secret Sharing (SSS)
 
-This project is a terminal & web based implementation of Shamir's Secret Sharing. It allows users to split sensitive text or images into multiple shares. To recover the original secret, a specific number of these shares (the threshold) must be combined. If you have fewer shares than the threshold, it is mathematically impossible to retrieve the secret.
+This project is a web-based implementation of **Shamir's Secret Sharing (SSS)**. It allows users to split sensitive text or images into multiple cryptographic shares. To recover the original secret, a minimum number of shares (the **threshold**) must be combined.
 
-## **Features**
+If fewer than the threshold number of shares are available, it is **mathematically impossible** to reconstruct the secret.
 
-* **Text Encryption and Decryption**: Convert secret messages into shares and back.  
-* **Image Encryption and Decryption**: Process image files by breaking them into smaller chunks and generating share files stored in a ZIP archive.  
-* **Web Interface**: A brutalist-style frontend built with HTML, CSS, and JavaScript.  
-* **FastAPI Backend**: A Python-based API that handles the mathematical operations.  
-* **Terminal Version**: A standalone script for command-line usage.
+---
 
-## **How the Math Works**
+## Features
 
-The implementation is based on polynomial interpolation over a finite field.
+- **Text Encryption & Decryption**  
+  Convert secret messages into cryptographic shares and reconstruct them later.
 
-### **1\. The Polynomial**
+- **Image Encryption & Decryption**  
+  Image files are processed as byte data, split into chunks, and converted into shares stored inside a ZIP archive.
 
-To hide a secret, we create a polynomial of degree ![][image1], where ![][image2] is the threshold of shares needed for recovery.
+- **Web Interface**  
+  A brutalist-style frontend built using HTML, CSS, and JavaScript.
 
-* ![][image3]![][image4] is the **Secret**: The value we want to protect is the y-intercept of the polynomial.  
-* ![][image5] are **Random Coefficients**: These are chosen randomly for every new encryption session.
+- **FastAPI Backend**  
+  A Python backend responsible for all cryptographic and mathematical operations.
 
-### **2\. Creating Shares**
+- **Terminal Version**  
+  A standalone CLI script for command-line usage.
 
-A share is a point ![][image6] on this polynomial.
+---
 
-* The ![][image7] value is the share index (e.g., 1, 2, 3).  
-* The ![][image8] value is ![][image9] calculated for that specific ![][image7].
+## How the Math Works
 
-### **3\. Finite Field Arithmetic**
+The implementation is based on **polynomial interpolation over a finite field**, following the original scheme proposed by Adi Shamir.
 
-To ensure the secret remains secure and the numbers do not grow infinitely large, all calculations are performed within a finite field using a large prime number.
+---
 
-* This project uses a Mersenne Prime: ![][image10].  
-* Every addition, multiplication, and exponentiation is followed by a modulo operation: result % fieldPrime.
+### 1. The Polynomial
 
-### **4\. Recovery (Lagrange Interpolation)**
+To hide a secret, we generate a random polynomial of degree \( k - 1 \), where \( k \) is the minimum number of shares required for recovery.
 
-When you have at least ![][image2] shares, you can reconstruct the original polynomial using Lagrange Interpolation. The formula finds the unique polynomial that passes through all your points and solves for ![][image11], which is the secret ![][image4].
+\[
+P(x) = a_0 + a_1x + a_2x^2 + \dots + a_{k-1}x^{k-1}
+\]
 
-## **File Structure**
+- **\( a_0 \) (the constant term)**  
+  This is the secret. Recovering \( P(0) \) reveals the original secret.
 
-* main.py: The FastAPI application and routing logic.  
-* sss.py: The core logic for polynomial evaluation and secret reconstruction.  
-* index.html & recover.html: The user interface for encrypting and decrypting.  
-* script.js: Handles frontend form submissions and dynamic input generation. (Made with AI-assistance.)  
-* style.css: The brutalist aesthetic styling. (Made with AI-assistance.)  
-* sss-terminal.py: A command-line version of the tool.
+- **\( a_1, \dots, a_{k-1} \)**  
+  These are randomly generated coefficients, freshly chosen for each encryption.
 
-[image1]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAZCAYAAABKM8wfAAABpUlEQVR4Xu2UvUoDQRSFE6Ki+I/GYHY3mz9Y3DaWlooE8QFU9CFs8gQWki6VpQ9gYSMiptBGBAsrERRBRAjYWNlYqN/dJJIMMVmEXUHmg8PszD0bTm4yNxLRaP4Jtm2fplKpJ9YXdK/W/4JcLmfl8/kx9dyDkMV0Or3L+omO1HrYkKGM3mniqlrzIOygBEUfmBbVekjE6OoMWSbIcSbN+zGwYRgmhmf0aJqmodbDpmdg6ap0Fx2w7ZOzQqHQn0wmp3mMtbuDp2dgijtiQNuy52dZQ3fsr9Gx6g8aP4Fr6EZuJmuFoyjmUuNLXKr+oPETWILd2vXx5l06GSl0eZn/95Tqb9K4rLN+JBcq4vPv5Tew6BXTPkdR1dMJ/CvoQWa4D53L5VY/oxNdAzuOM0rxzbKseQwuzxdoXfWFSdfAFObQFcVJ2bMuoEPXdQcYcUM8b6nvBE2vwBW00bIvYizJWGPdQ0ut/jCw69NJAm9Kju9CIpEYplDNZDJO8yybzY5zVsN8wlpueyFA4vH4SLOzqto6LcaW9zxkMjSmg6/Lp9FoNJpf8QVAuoVg7kkVmAAAAABJRU5ErkJggg==>
+---
 
-[image2]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAZCAYAAADnstS2AAABGElEQVR4XmNgGMJAUVFRX05O7pG8vPwvBQWFdHR5FCAlJSUCVHgaiL/JysqaostjAKDCt0C8BshkQZfDAECF/4FOKUcXxwqAiv8BFbsgCTEaGxuzIvEhQF1dnReo+Im0tLQMiA9yN5B/EYi3i4qK8qAoBkr6ASVagdgKiLtkZGQ4gbQnEJ9QUlLiR1EMVbgKiKeKi4tzg8RATgDyJVEUgiSBgntAHpSHBF8UyGQURTAAcidQwROg5wSBOBXI/gukpzNgC0JQCAAV/AOxQZ4Bsg8A8UOQE4ByccgeZAEKrgHityAOkpMOqKio8AGjPgKmEOQEYXlIEB2AiQHZwSDNQLwNI5yBugWAmANZDGS1srKyGLLYKCAbAAB4DjvnlwY2iQAAAABJRU5ErkJggg==>
+### 2. Creating Shares
 
-[image3]: <data:image/png;base64,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>
+Each share corresponds to a point on the polynomial:
 
-[image4]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAZCAYAAAA8CX6UAAABU0lEQVR4Xu2SvUvEQBDFE4KgoPgZ9ZKQTyFcZZFCsBb/AwvxP7AXUbC3vkoOxcrKSlAQK0GxUBAbLay0sbG21t8c2bgseqaxy4PH7ryZeTu7iWU1aPAPKIpiIAiCCba2mauFOI5nwzA8jKLoHd7DB3gA22btr/B9f5KGNyaZUxpxC76g+XptXzDJJk0dXUuSZB7tjEkHlVaa78Au+qo8Q9Xged4UiUfMlirR6jWtyQGGdg0X2ToYbZHfq5IEBckPrhd8t/SaOj+YH1nlR5B64qcqqYxc1x3WtHG0O3kf1jbxSp7nI+y3zRoVWxQPIZ5LQmJpZOxn1s80TUdZj2ECW/pV5WC0y8pIIM3wCoMTeFs+dBfewA1K7FpGgizLpoVsnVKyMR1Tecxnahn9BfkNaNxXsUwIX/Wa2qDxFMNduAAviNfNmrpw5D255rJ8CDPZoD++ALc2Sk1Kyb0jAAAAAElFTkSuQmCC>
+\[
+(x_i, y_i) \quad \text{where} \quad y_i = P(x_i)
+\]
 
-[image5]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGEAAAAZCAYAAAAhd0APAAADBUlEQVR4Xu2YT6jMURTHZzJESB7TZP79Zqap8aaExpId6m1koZCSssAOKasnm1c2LJRslCSl2OltZEFPL/V2erIh3lsQsiBPPQqfM797defkN38wM810P3W6v3vOnd8939/53TPzXizm8Xg8Ho/H4/F4PK2JZ7PZEe0cYup6a7XaUh3oOalUamWhULgQBME77CHXJ7Dz+Xz+MOG4Xj8MuHrROd9XvclkchWJLOZyuR3Wx/wK9pPEjrlrhwHRi677rl6hid6Ese7BxsdJYJJxufUxf4At8GbU3LUQLxaLu5VvoDB65YH/1iudQOtlfhT7gn3ERq3/b5CW5+7XQKlUWsMGT/QbgO8tNkNSa2VOvMD1dXyvRIC7dpCwerUGtJVcvRZ5LvinKpXKatffLqaQ09hXOYE6Xoe3ejMLPsvo+iVJeegx0x/li6tarS6TN4XYgrt2kLB6xVw/rWmPq9eQYN1d7LLj6wg5YQxxinkjsgj2oabT6fWuX4qAHeIywQ0OWv+gF8Hmjz1z/cwnXL3lcjlJwVL4Xhr/P9G0CPSqFWxyjzFj5iPM72Bz2AbpnyR+zq6PKoLpqfI9IsVb1HEB/5iJR7Yz7n/WrBnTMcHZp56fjgv4r8k9yP2Ajlm92Gszt3p/yP1cvSaXGXxbGM8E4Qk63XDDNmlaBCGTyWS5+awsZHzBuJ/xO0k8YpzijQjs2qgiCKZ/fhNBOiaISOwx9knHLLSFbcQ/SE46ZmGfk+RxNeq3PbFdsoc8RB0TjN5pVy92ROsNwlb0nNgp2Yv4dtNeYtI5mO/7k7F+r2h192xZBIHE1snxs8LkA+7c0qwIFuIT2tcPoopgkF95Dfr0PAhb0S1sFrtp/UJXitAurYpgjntDwn0iTq47tbMTgrDljZqTMyetCyvrde3wX4rA5pu40VOSeR+Ev5zmtUg5xkHYbra6/l5jfoZOan+ncI+LMpo/Ziexcd0ZWsFnLsmzCsI2/Ybr27aldQU5ohSqoP29xvwLZqP2d4p64EuMeTwej8fTNX4BFSnhu8NiLvgAAAAASUVORK5CYII=>
+- The \( x \)-value is a unique share index (e.g., \( 1, 2, 3, \dots \)).
+- The \( y \)-value is computed by evaluating the polynomial at that \( x \).
 
-[image6]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAZCAYAAACl8achAAADGUlEQVR4Xu2WP2gUQRTG9zgFRUVFY0jucpu7iDEoWJyKBkGECFpokRQKEWuLVAoKCmJjYSUIYhMRCwkIgqKBFBYBSxuLBEEIRFFSSAiKCf7BnL/vdjYZHruXtck1+eCxM+97M/PNm38bBGtoLvLOmoJqtbq+Uqlstf5UqEEYhvcp5iy3WpBgNDwJsmiQ4FKp9IAGDy232igUCjvQcSVYSThBA9hUsVjcbblmgAR+KpfLh61/CYgdwuY6Ojr2W65Z6OzsPIWm3/parg7IcWyUgA2Waxba29t3omkSG6G6zvISPY9dt34P+a6url3epGw9M1paWjZrz1p/AnI6kNg0W7ZgSYmuYaet3yGv/SUjZgGhd/i+wz5js1i/bZACidA2/IL9sNcavil8e3wfY17D/4fvMd9fB8QMRMX68e2DexnXJVATpJhD/GOVw2j5VgRxr3RmyNpG+h2jftTjerBxrYLfhrg+/IsS7/vrgPiItSX4exnorFe/7USr3IadkIjlFukgdkjbCQFVyvN+O+qD2D0/Xohjk0Tn00T7UBaUDWzWcv8DhN+KJ+6QQ9QjPzkxGolOzbSPMFpC7eE3lssKBt9O+7f+xONbIml7MpFDcAtpor9zkR+w/sDdEiqE0RLWQm8ZydpxZWM5vDE0hsbyJx5n0+5nx51xY162nASJGPR93naolaIDOePi+t2Tf1MWuKcW/7Dja0zmvN9XDLhyGN0646qTyYOUv2KLJrSOMDpDWt0ey4lUR0kH4WIpuureY72l6N9kDpvAbki8F3sS3zcJSFxOB7gLxPxkYi9cv7+waRsXJ434scTDDjmCTWp/WU6NfXEMtq3Ro0I/g41EC2qvB8ZNdFHj25hw+QwNWa4O11izT37ns0M3wV2szxJuK+hheabMud/gp9hfjW/jJTaMdkDZckvgkMCHEwg/Z7kscP/Bo0lXl0C/l7TV+B4hy8Uwusqu+qvoQa/na/tqJkK/gnT6wfqzoLW1dRNt9wbp/8B6DwYQ+lyCwgZXrOKUROtPBQ16uru7t1j/aoFJVdAwbP1rWEMG/AN4ada0tE1eKwAAAABJRU5ErkJggg==>
+Each share individually reveals **no information** about the secret.
 
-[image7]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAaCAYAAABhJqYYAAAA9UlEQVR4XmNgGAV0BwoKCgKioqI8ML6xsTErkGJGUgIBSkpKavLy8k+A+D1QUycQmwPZ14D4gqKiojxcIYgDBFtBbDk5ORsg+yeQfiQjI6MKZP8H4iK4YqBEHRDHgNiysrKmQMlvQP58FRUVPiD7H9AWD7BCIIMDKJEqLS0tDOWnQ02LBvGBtuoDKUaYwXAA1CQIVHQahEFsdHkwAIUAyGSgAmOgwq8gJzBATQPaFAGzlQEoCfIdKBTeIjkB7iEgew0wpPjBHJhpQLwNqPgQsntBioAe9oNpBAsANewEKtgCpHOBdCnIFiBeCsRXGbB5bhTQFAAAXWc6SmEy9pgAAAAASUVORK5CYII=>
+---
 
-[image8]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAaCAYAAACO5M0mAAABDUlEQVR4XmNgGAXUBowKCgoc6IIoQFpaWkZeXn4/EH+Tk5PzRZYDit0HGmDPICMjwwnkrAbiYCB+AsRLgfKMSAr/ATW7MIAIoI6FQDEWkCAQT4IpAsoJgjSDbATp8FRUVLQDmQJSCNTkgWSaJhBvRXG7rKysH7JpIADig61FE2wFmQ7jQ609DaSVkNUxgNwJFDSG8aHWvsUIMqCicpj7lJSU+IGKtgPxfxRFSJIfgYpXAum7QPwF5DlkNaBgAbnvG0wAyA4CKQLiZrgqIEcSiB/CrAEGlTzQ1FtA/h6QLXCFoqKiPECJXUCJSUDaAUhfBykCsiXgimBASkpKBCjRCMQzgYqsgELM6GqGAgAAa0BBBWpZANUAAAAASUVORK5CYII=>
+### 3. Finite Field Arithmetic
 
-[image9]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACkAAAAZCAYAAACsGgdbAAAC00lEQVR4Xu2WvWsUURTFd1FBUdSgYdns7sxmWdBUFqtIIKWKkCCCdjaKhX+AqGghguQfWIKFCmIhiB9gE1QQjGAhpBALEQQxStRKC8FACqO/47yZPG5mZ9Z8gEIOHHbmnvvenHffvDtbKKziH0Vvb+8m0cbz0Gg0ttjYiqBWq+0OguBZf39/aLU8hGE4XKlUqja+ACQOwCvwKg/76PhA945tDBxotVrr7FgZrNfrb+Feq3UL5n+Vu8C+vr7tPOQwxs4xYI7fi/CoyP1J+BT+gpN2LLEn8DKXRat1C8bfUTHSirAAJI7CcQyvt5pbgIyW4xirL3E/VliCQaFarW5g/keirq2eoFQqbVRVZMZqYC3aPZmUsTjIVh8if5+fuFhQmFPMPwsHrZaAhzVI+MLvkNVYXQVtSiYL81Urknsj56Uvom/LuE/Agvcw/0yHIkVQVWylHGTmrDQdkDhIrIfYpHbAT3bQmBH090F0CG8zdie/j4l9hqeV4w8gVoYftGN+PIH6G+KEjLhJ/5D7b/A5HCZtjT8GvUX8hx+LQfwh1W969zOaX89Rpbh+YfujzgHxcRn14wnCqAV9hXNW64QskzzwRMGrlBYPR3XdbDY3i0myB8bdzDJ5zE00ZbVOIHcQztp4CopafNDFAcszed2ZTH8fUpBVSR/qweRN5xwwQYu5lWoyPgAyqTZg9U7IMqkTzFxbdU3eUGh6L7H989kRvHPxzmqq4hlXxU+c7B1W7wSvr/ZYzc035lrXS3jBSUXMHk/7sgSuBcJ2EsTQLgLf3YQJFffGZoIHXmLMgI0Tm4b34Wt4JIxO990w2rFrNl9wLfAncx602pLApINpr4hrJ+V4i91WlrP+yqG34ZuUPr00xN/czO9tF5AxGdTOWG1ZEERfownbnP8G8Wth48sGHYLQ/e9MOxB50OLClM/kskPm2KrzVHXEannQThRW2uAq/gf8BhpJyA/3TYagAAAAAElFTkSuQmCC>
+All computations are performed inside a finite field to prevent integer overflow and ensure cryptographic security.
 
-[image10]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAYAAAC74kmRAAACaklEQVR4Xu2WvWtUQRTF32O30PiFxmXNrrtvv2AVERELQf8AC42NCtqIYOdHm5A6WIlBtrBQRMRCCxu7ELdQbGwtLAUVEUwjiLEQNP7Oegcns4Zdm2QfvgOHN3Pvmcncs/ORKMowHKrV6pkkSY7AiXK5vBvs99I54rdgp1arHaYfe7kI7Q7iG/xY6kBx1zHhPJys1+tFL74XvrVunvZD1y8Wi5v4xBR/v1AobDZNOkFRs/r1wzhmtIl/cn0Mmqa/5GvSYkDM1h7XNqeoJEwSv0Yh51QM7bt+rlQqjVkzxoB75D/4+VExoNVqbW02m5Uw3gOLfgkXtXj4A3ZsC7v8bXiRZo4z3apUKie94T1Q/D7tBr5TfnwUDNCPx9reaS1hTts4IXEssstLlxziZdhtNBrbFHPn2YbkKXIeIzZaP5IO/VPmmaGbc3FhPQ1gTXPwK/ymmvoMUGEqVO4k3hmn/cJMeBz9vtyWKfqql3/N1t9pXW390/pa7rLTCetpgIPdTf0GgJjEDRIL/iKJPTMDumbSg3a7vUU5JtuO/qbGitryMkBEd0lzuXmEUTdAUCErtq1+YTOgY/0rcJYJzsIn7mhwfA4Q/2Jax66NmeMPv+f7HX6k/ci/V9YSgwzoA+Kf8DM86GK6QZnoBJPUPGkq8E8G2HOol+BUmEsrhjUgh2AG4WKYWCvoBWKxz3V0BpF1voHHwzn+hmEM6F1miF7pnVdA/8MTO0ozH2hTh4EGkLgAF+AuF2PQ5KoDUoaBBiCYJ7kH0YTHOxoYatOIVQ3Q+5z8efNDLjHw0IoBKYMrPGSfERkyZMiQ4T/EL4BWwlYdFtIFAAAAAElFTkSuQmCC>
+This project uses the **Mersenne prime**:
 
-[image11]: <data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAZCAYAAABD2GxlAAACzklEQVR4Xu2WvWsUQRjG9zBCREGCHmfuY+c+EEmleGoIWAYR/EAwhZDSwsYqomIjQvAfCGIhgWARbIJoIVgceIpdahGCRQyKlQqCggrR35udvZt7d+eidwkI5oGX3X2ed2aemZ2vINjCP4ZsNrtLQvM+1Ov17dVqdbfmNwWlUulIGIbPK5WK0ZoPYs4YM89rRmsJkDhC3CXu0dCKjUfybWOGxk9Ir3VZMVcul5eIUa0JKHu4WCzuTytbKBT2oF8J1jOZz+f30sA5TF2nwCrPm8SEBN8XiWfEL2JRl4VrENOBaoT69sE/5HmfeMz7R+KymyOQwaDzxzSfCiq4TTyhwkGtWfNicjjmqDjH950gae6CzZ10uEGpm6io3JNwP+Tp8gnkcrmdJDbEiNbAANqCNCqmYpLfe5b8cTfRMfIT7birwc24pgXy9+BeEQ/4HHC1DlBZlaQPulIBc6iAtiwGg/ZoZcidYx4V3Vxyhom3xFf0uqvZvzDrciADNy/1SztKa0NGQ4+QhRi5JhqjsxSTcENwizLybrKYEnNdDCamkOUTI96C7F8kNMVE2F7FK3x/Il4Sp0jb5paJjbicy3cx2NT7Jfy4iRZn2vRqbTOyyla15sMGG1wr083gpIlW3bLWfCB3jPiu+c0yOGsNLmjNB98ImnUWieyLLidg/h8l/1uqwdBOdjFI4Uta98FnMN6uTDSnOrYgGYi0Nsg7YwdoSmtS6KoV37OCD2jdB2ffHNKabD1orzHzIuZ4H7UdShxrJjogZA2MtEjMHIT4Ys21QninbFfQ6K2OSh2gHUJ7Y6L5PUV8pjNzOi/eQdCesg/u0HpfoOKxtF8WQy4IYpDGJ2q1WknrAumg8ZzTfUN63G/PxRjxzqgzesMQRqdMs8fLpxxzjR7L/hnsb1y7N6bd+bqBMucrf3HJ7RlijLl4g9E8rTUfwuhyoi8OW/h/8BuB4eNUu66jYwAAAABJRU5ErkJggg==>
+\[
+p = 2^{521} - 1
+\]
+
+Every operation is performed modulo \( p \):
+
+- Addition  
+- Multiplication  
+- Exponentiation  
+
+\[
+\text{result} \equiv \text{operation} \pmod{p}
+\]
+
+This guarantees that all values remain bounded and reversible.
+
+---
+
+### 4. Recovery (Lagrange Interpolation)
+
+When at least \( k \) valid shares are available, the secret can be reconstructed using **Lagrange interpolation**.
+
+Given \( k \) points, there exists exactly one polynomial of degree \( k - 1 \) that passes through all of them. The secret is recovered by computing:
+
+\[
+P(0) = a_0
+\]
+
+Lagrange interpolation directly evaluates this value without reconstructing the full polynomial explicitly.
+
+---
+
+## File Structure
+
+```text
+.
+├── main.py           # FastAPI application and API routes
+├── sss.py            # Core secret sharing and reconstruction logic
+├── sss-terminal.py   # Command-line version of the tool
+├── index.html        # Web UI for encryption
+├── recover.html      # Web UI for recovery
+├── script.js         # Frontend logic and form handling
+└── style.css         # Brutalist-style UI styling
