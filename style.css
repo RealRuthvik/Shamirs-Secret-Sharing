@@ -1,43 +1,79 @@
+:root {
+    --bg-color: #0a0a0a;
+    --text-primary: #d0d0d0;
+    --text-secondary: #888888;
+    --accent-harsh: #ff3e3e;
+    --border-thick: 3px solid var(--text-primary);
+    --font-stack: 'Courier New', Courier, 'Lucida Console', monospace;
+}
+
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    border-radius: 0 !important; 
+}
+
 body {
-    font-family: "Times New Roman", Times, serif;
-    background-color: #ffffff;
-    color: #000000;
-    margin: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    line-height: 1.5;
+    padding: 2rem;
+    min-height: 100vh;
 }
 
 h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    border-bottom: var(--border-thick);
+    padding-bottom: 1rem;
 }
 
 .nav-link {
     display: inline-block;
-    margin-bottom: 20px;
-    color: #0000EE;
-    text-decoration: underline;
-    cursor: pointer;
+    color: var(--accent-harsh);
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover {
+    background-color: var(--accent-harsh);
+    color: #000;
 }
 
 fieldset {
-    border: 1px solid #999;
-    padding: 15px;
-    margin-bottom: 20px;
+    border: var(--border-thick);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background-color: #0f0f0f;
     max-width: 800px;
 }
 
 legend {
-    font-weight: bold;
-    padding: 0 5px;
+    font-weight: 900;
+    padding: 0 10px;
+    text-transform: uppercase;
+    background-color: var(--bg-color);
+    color: var(--accent-harsh);
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
     font-weight: bold;
+    color: var(--text-secondary);
 }
 
 input[type="text"],
@@ -45,78 +81,188 @@ input[type="number"],
 input[type="file"],
 textarea {
     width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid #999;
-    font-family: monospace;
+    padding: 12px;
+    border: 2px solid var(--text-secondary);
+    background-color: #1a1a1a;
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    font-size: 1rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-harsh);
 }
 
 textarea {
     resize: vertical;
-    height: 150px;
+    height: 120px;
 }
 
 .form-row {
     display: flex;
     gap: 20px;
 }
-.form-row .form-group {
-    flex: 1;
-}
 
 button {
-    padding: 5px 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #999;
-    color: black;
+    background-color: var(--text-primary);
+    color: var(--bg-color);
+    border: none;
+    padding: 10px 20px;
+    font-family: var(--font-stack);
+    font-weight: 900;
+    text-transform: uppercase;
     cursor: pointer;
-    font-family: "Times New Roman", Times, serif;
-    font-size: 1em;
+    transition: all 0.2s;
 }
 
-button:active {
-    background-color: #e0e0e0;
+button:hover {
+    background-color: var(--accent-harsh);
+    color: #000;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--text-secondary);
 }
 
 .output-area {
-    margin-top: 20px;
-    border: 1px solid #999;
-    /* Removed padding here, moved to individual rows for cleaner look */
-    padding: 0; 
-    background-color: #fff;
-    font-family: monospace;
-    word-break: break-all;
+    margin-top: 2rem;
+    border: var(--border-thick);
+    background-color: #000;
 }
 
-/* NEW: Zebra striping for shares */
 .share-row {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    padding: 15px;
+    border-bottom: 1px dashed #333;
+    word-break: break-all;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 
 .share-row:nth-child(odd) {
-    background-color: #f9f9f9;
+    background-color: #0a0a0a;
 }
 
-.share-row:nth-child(even) {
-    background-color: #ffffff;
+.dynamic-share-input {
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
-.share-row:last-child {
-    border-bottom: none;
-}
-
-.hidden {
-    display: none;
+.highlight-brutal {
+    background-color: var(--accent-harsh);
+    color: #000;
+    padding: 2px 8px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .helper-text {
-    font-size: 0.9em;
-    color: #555;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
     margin-top: 5px;
+    font-style: italic;
 }
 
-/* Styling for dynamic inputs on recover page */
-.dynamic-share-input {
-    margin-bottom: 5px;
+@media (max-width: 600px) {
+    body {
+        padding: 1rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    fieldset {
+        padding: 1rem;
+    }
+}
+
+:root {
+    --font-signature: 'Herr Von Muellerhoff', cursive;
+}
+
+footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    border-top: 1px dashed var(--text-secondary);
+}
+
+.separator {
+    width: 100px;
+    height: 3px;
+    background-color: var(--text-secondary);
+}
+
+.signature {
+    font-family: var(--font-signature);
+    font-size: 3rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    transform: rotate(-5deg);
+}
+
+.social-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.social-links a {
+    color: var(--text-secondary);
+    width: 24px;
+    height: 24px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.social-links a:hover {
+    color: var(--accent-harsh);
+    transform: scale(1.1);
+}
+
+.social-links svg {
+    width: 100%;
+    height: 100%;
+    stroke-width: 1.5;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+    margin: 15px 0;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: #333;
+    border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 10px;
+    background: var(--accent-harsh);
+    cursor: pointer;
+    margin-top: -8px; 
+    border: 1px solid var(--text-primary);
+}
+
+input[type="range"]::-moz-range-track {
+    background: #333;
+    height: 4px;
+}
+input[type="range"]::-moz-range-thumb {
+    background: var(--accent-harsh);
+    height: 20px;
+    width: 10px;
+    border: 1px solid var(--text-primary);
 }
